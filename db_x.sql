@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
--- Host: localhost    Database: movies_site_z_development
+-- Host: localhost    Database: movies_site_x_development
 -- ------------------------------------------------------
 -- Server version	5.7.27-0ubuntu0.19.04.1
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `movies_site_z_development`
+-- Current Database: `movies_site_x_development`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `movies_site_z_development` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `movies_site_x_development` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `movies_site_z_development`;
+USE `movies_site_x_development`;
 
 --
 -- Table structure for table `genres`

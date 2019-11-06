@@ -1,3 +1,3 @@
-class SiteXUser < CentralRecord
+class SiteXUser < SiteXRecord
   self.table_name = "users"
 end

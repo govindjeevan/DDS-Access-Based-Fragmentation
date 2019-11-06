@@ -1,3 +1,3 @@
-class SiteYGenresMovie < CentralRecord
+class SiteYGenresMovie < SiteYRecord
   self.table_name = "genres_movies"
 end
