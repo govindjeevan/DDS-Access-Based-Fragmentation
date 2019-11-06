@@ -1,24 +1,11 @@
-# README
+## Setup
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Step 1: Make 3 databases using Mysql console:
+    movies_central_development
+    movies_site_x_development
+    movies_site_y_development
+    movies_site_z_development
+    
+* Step 2: Import the data from movielens.sql dump. Currently same data in all dbs
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Done!    
