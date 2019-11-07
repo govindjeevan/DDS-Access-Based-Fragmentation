@@ -13,12 +13,13 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: govind
-  password: gp
+  username: root
+  password: hehesecure
   socket: /var/run/mysqld/mysqld.sock
 
 development:
   <<: *default
+  database: movies_central_development
 central:
   <<: *default
   database: movies_central_development
