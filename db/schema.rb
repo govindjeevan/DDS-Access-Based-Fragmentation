@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_075535) do
+ActiveRecord::Schema.define(version: 2019_11_08_123410) do
 
-  create_table "central_access_log", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "access_log", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "site_id"
     t.boolean "rw"
     t.integer "fragment_id"

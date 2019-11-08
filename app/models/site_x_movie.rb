@@ -1,4 +1,4 @@
-class SiteXMovie < SiteXRecord
+class SiteXMovie < Movie
   self.table_name = "movies"
 
   def year
