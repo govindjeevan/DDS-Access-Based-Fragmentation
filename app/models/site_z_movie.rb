@@ -1,3 +1,3 @@
-class SiteZMovie < SiteZRecord
+class SiteZMovie < Movie
   self.table_name = "movies"
 end
