@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_08_123410) do
+ActiveRecord::Schema.define(version: 2019_11_09_085059) do
 
   create_table "access_log", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "site_id"
     t.boolean "rw"
     t.integer "fragment_id"
     t.integer "volume"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "fragment_site_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "site_id"
+    t.integer "fragment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

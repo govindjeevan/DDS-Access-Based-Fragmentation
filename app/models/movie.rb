@@ -7,15 +7,25 @@ class Movie < ApplicationRecord
     AccessLog.update_write_log(record)
   end
 
+  def fragment_id
+    release_date.year
+  end
+
+  def self.fetch_site_id(fragment_id)
+    establish_connection(:central)
+    QueryRouter.where(fragment_id: fragment_id).last.site_id
+  end
+
   def self.find(*args)
-    if args.last == 1
-      establish_connection(:site_x)
-    elsif args.last == 2
-      establish_connection(:site_y)
-    elsif args.last == 3
+    args.each do |x|
+      if fetch_site_id(x) == 1
+        establish_connection(:site_x)
+      elsif fetch_site_id(x) == 2
+        establish_connection(:site_y)
+      elsif fetch_site_id(x) == 3
       establish_connection(:site_z)
+      end
     end
-    args.pop
-    super
+    where(release_date: )
   end
 end
