@@ -1,4 +1,5 @@
 class Movie < ApplicationRecord
+
   after_find do |record|
     AccessLog.update_read_log(record)
   end
@@ -16,7 +17,8 @@ class Movie < ApplicationRecord
     QueryRouter.where(fragment_id: fragment_id).last.site_id
   end
 
-  def self.find(*args)
+  def self.fetch_movies(*args)
+    result = []
     args.each do |x|
       if fetch_site_id(x) == 1
         establish_connection(:site_x)
@@ -25,7 +27,8 @@ class Movie < ApplicationRecord
       elsif fetch_site_id(x) == 3
       establish_connection(:site_z)
       end
+      result << Movie.where('YEAR( release_date ) = ?', x).pluck(:title)
     end
-    where(release_date: )
+    result
   end
 end
