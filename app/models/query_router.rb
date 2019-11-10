@@ -40,22 +40,16 @@ class QueryRouter < ApplicationRecord
       ApplicationRecord.establish_connection_to_site(target_site_id)
       fragment.each do |fragment_piece|
         fragment_piece.each do |movie|
-          Movie.create(:title => movie.title, :release_date => movie.release_date)
+          Movie.create(title: movie.title, release_date: movie.release_date)
         end
       end
     end
   end
 
-
   def self.merge_all_scattered_fragments
     QueryRouter.all.each do |x|
-      sync_scattered_fragment(x.fragment_id)
+      merge_scattered_fragment(x.fragment_id)
     end
-  end
-
-
-  def self.reallocate_fragments
-
   end
 
 end

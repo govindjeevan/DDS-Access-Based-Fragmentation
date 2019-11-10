@@ -4,7 +4,7 @@ class Movie < ApplicationRecord
     release_date.year
   end
 
-  scope :find_by_year, ->(year) { where("extract( year from release_date ) = ?", year) }
+  scope :find_by_year, ->(year) { where('extract( year from release_date ) = ?', year) }
 
   def self.fetch_fragment(year, current_site)
     # searching record in local site
