@@ -1,34 +1,32 @@
 class Movie < ApplicationRecord
 
-  after_find do |record|
-    AccessLog.update_read_log(record)
-  end
-
-  after_commit do |record|
-    AccessLog.update_write_log(record)
-  end
-
   def fragment_id
     release_date.year
   end
 
-  def self.fetch_site_id(fragment_id)
-    establish_connection(:central)
-    QueryRouter.where(fragment_id: fragment_id).last.site_id
-  end
+  scope :find_by_year, ->(year) { where("extract( year from release_date ) = ?", year) }
 
-  def self.fetch_movies(*args)
-    result = []
-    args.each do |x|
-      if fetch_site_id(x) == 1
-        establish_connection(:site_x)
-      elsif fetch_site_id(x) == 2
-        establish_connection(:site_y)
-      elsif fetch_site_id(x) == 3
-      establish_connection(:site_z)
+  def self.fetch_fragment(year)
+    # searching record in local site
+    ApplicationRecord.establish_connection_to_site(@site)
+    result = Movie.find_by_year(year)
+    if result.present?
+      AccessLog.create_read_log(year, result.count)
+      return result
+    else
+      # if record not found locally
+      # finding the remote site with the fragment
+      fragment_site_id = QueryRouter.find_site_of_fragment(year)
+      if fragment_site_id
+        # connecting to the remote database and querying it
+        ApplicationRecord.establish_connection_to_site(fragment_site_id)
+        result = Movie.find_by_year(year)
+        if result.present?
+          AccessLog.create_read_log(year, result.count)
+          return result
+        end
       end
-      result << Movie.where('YEAR( release_date ) = ?', x).pluck(:title)
     end
-    result
+    return nil
   end
 end
