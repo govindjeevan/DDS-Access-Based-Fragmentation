@@ -26,7 +26,7 @@ class QueryRouter < ApplicationRecord
     update_query_router(fragment_id, target_site_id)
   end
 
-  def self.sync_scattered_fragment(fragment_id)
+  def self.merge_scattered_fragment(fragment_id)
     establish_connection(:central)
     target_site_id = QueryRouter.find_by_fragment_id(fragment_id).try(:site_id)
     if target_site_id
@@ -47,10 +47,15 @@ class QueryRouter < ApplicationRecord
   end
 
 
-  def self.sync_all
+  def self.merge_all_scattered_fragments
     QueryRouter.all.each do |x|
       sync_scattered_fragment(x.fragment_id)
     end
+  end
+
+
+  def self.reallocate_fragments
+
   end
 
 end
