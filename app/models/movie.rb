@@ -6,12 +6,12 @@ class Movie < ApplicationRecord
 
   scope :find_by_year, ->(year) { where("extract( year from release_date ) = ?", year) }
 
-  def self.fetch_fragment(year)
+  def self.fetch_fragment(year, current_site)
     # searching record in local site
-    ApplicationRecord.establish_connection_to_site(@site)
+    ApplicationRecord.establish_connection_to_site(current_site)
     result = Movie.find_by_year(year)
     if result.present?
-      AccessLog.create_read_log(year, result.count)
+      AccessLog.create_read_log(year, result.count, current_site)
       return result
     else
       # if record not found locally
@@ -22,7 +22,7 @@ class Movie < ApplicationRecord
         ApplicationRecord.establish_connection_to_site(fragment_site_id)
         result = Movie.find_by_year(year)
         if result.present?
-          AccessLog.create_read_log(year, result.count)
+          AccessLog.create_read_log(year, result.count, current_site)
           return result
         end
       end

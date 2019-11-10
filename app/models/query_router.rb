@@ -15,7 +15,6 @@ class QueryRouter < ApplicationRecord
   def self.update_query_router(fragment_id, site_id)
     establish_connection(:central)
     QueryRouter.first_or_create(fragment_id).update(site_id: site_id)
-    ApplicationRecord.establish_connection_to_site(@site)
   end
 
   def self.relocate_fragment(fragment_id, target_site_id)
