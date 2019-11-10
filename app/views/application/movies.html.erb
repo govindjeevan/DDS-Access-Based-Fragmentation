@@ -1,14 +1,15 @@
+<h1>User Site: <%= @site %></h1>
+<h3>Fragments:   <%=Movie.all.map(&:fragment_id).uniq %>
+</h3>
 <table>
   <tr>
     <th>Title</th>
     <th>Release</th>
-    <th>Year</th>
   </tr>
   <% @movies.each do |movie| %>
     <tr>
       <td><%= movie.title %></td>
       <td><%= movie.release_date %></td>
-      <td><%= movie.release_date.year if movie.release_date %></td>
     </tr>
   <% end %>
 </table>

@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   get "movies/local", :action => "local_movies", :controller => "application"
   get "movies", :action => "all_movies", :controller => "application"
   get "movies/year/:year", :action => "movies_by_year", :controller => "application"
+  get "movies/site/:site", :action => "movies_by_site", :controller => "application"
 
 end

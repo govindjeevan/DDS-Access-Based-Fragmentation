@@ -6,6 +6,11 @@ class Movie < ApplicationRecord
 
   scope :find_by_year, ->(year) { where("extract( year from release_date ) = ?", year) }
 
+  def self.movies_by_site(site)
+    ApplicationRecord.establish_connection_to_site(site)
+    Movie.all.pluck(:title, :release_date).to_a
+  end
+
   def self.fetch_fragment(year, current_site)
     # searching record in local site
     ApplicationRecord.establish_connection_to_site(current_site)
@@ -23,6 +28,7 @@ class Movie < ApplicationRecord
         result = Movie.find_by_year(year)
         if result.present?
           AccessLog.create_read_log(year, result.count, current_site)
+          QueryRouter.optimize_fragment_site(year, current_site)
           return result
         end
       end

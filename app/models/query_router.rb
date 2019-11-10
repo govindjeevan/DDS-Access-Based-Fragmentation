@@ -55,13 +55,65 @@ class QueryRouter < ApplicationRecord
     movie_array.each do |movie|
       Movie.create(:title => movie.title, :release_date => movie.release_date)
     end
+    update_query_router(fragment_id, target_site_id)
   end
 
-  def self.recalculate_optimal_sites(threshold)
+  def self.find_optimal_site(fragment_id, alpha, beta)
     # logic to refresh site_id in site fragment data table
 
+    logs = AccessLog.fragment_accesses(fragment_id, beta)
+
+    total_accesses = logs.count
+    total_volume = logs.pluck(:volume).sum
+
+    total_average_volume = total_volume/total_accesses
+
+    total_write_volume = logs.select{|x| x.rw==1}.pluck(:volume).sum
 
 
+    site_access_counts = Hash.new(0)
+    site_volume_transferred = Hash.new(0)
+    site_write_volume_transferred = Hash.new(0)
+
+    logs.each do |log|
+      site_access_counts[log.site_id] = site_access_counts[log.site_id] + 1
+      site_volume_transferred[log.site_id] = site_volume_transferred[log.site_id] + log.volume
+      if log.rw==1
+        site_write_volume_transferred[log.site_id] = site_write_volume_transferred[log.site_id] + log.volume
+      end
+    end
+
+    # sites with minimum number of access count alpha
+    frequent_sites = site_volume_transferred.select{|k,v| v > alpha}.keys
+
+    candidate_sites = []
+    frequent_sites.each do | site_id|
+      #sites whos average volume transfer with fragment exceeds the overall overage volume transfer
+      if site_volume_transferred[site_id]/site_access_counts[site_id] >total_average_volume
+        candidate_sites << site_id
+      end
+    end
+
+    if candidate_sites.empty?
+      return
+    elsif candidate_sites.length==1
+      return candidate_sites.first
+    else
+      return site_write_volume_transferred.key(site_write_volume_transferred.values.max)
+    end
+
+  end
+
+
+  def self.optimize_fragment_site( fragment_id, current_site)
+    alpha = 5
+    beta = 10
+    target = find_optimal_site( fragment_id, alpha, beta)
+    if target == current_site
+      return
+    else
+      transfer_fragment(fragment_id, current_site, target)
+    end
   end
 
 

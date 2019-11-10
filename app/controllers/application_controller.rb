@@ -2,7 +2,13 @@ class ApplicationController < ActionController::Base
   before_action :resolve_site, :connect_to_site
 
   def local_movies
-    @local_movies = Movie.all
+    @movies = Movie.all
+    render 'application/movies'
+  end
+
+  def movies_by_site
+    @movies2 = Movie.movies_by_site(params[:site])
+    render 'application/movies2'
   end
 
   def movies_by_year
@@ -12,18 +18,20 @@ class ApplicationController < ActionController::Base
 
   def all_movies
     ApplicationRecord.establish_connection_to_site(1)
-    @all_movies = Movie.all
+    @movies = Movie.all
     ApplicationRecord.establish_connection_to_site(2)
-    @all_movies = @all_movies + Movie.all
+    @movies = @all_movies + Movie.all
     ApplicationRecord.establish_connection_to_site(3)
     @all_movies = @all_movies + Movie.all
     ApplicationRecord.establish_connection_to_site(@site)
+    render 'application/movies'
+
   end
 
   private
 
   def resolve_site
-    @site = 1
+    @site = 3
   end
 
   def connect_to_site
