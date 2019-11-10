@@ -17,14 +17,6 @@ class QueryRouter < ApplicationRecord
     QueryRouter.first_or_create(fragment_id).update(site_id: site_id)
   end
 
-  def self.relocate_fragment(fragment_id, target_site_id)
-    site_id = QueryRouter.find_by_fragment_id(fragment_id).try(:site_id)
-
-    ApplicationRecord.establish_connection_to_site(site_id)
-
-    fragment = Movie.find_by_year(fragment_id).to_a
-    update_query_router(fragment_id, target_site_id)
-  end
 
   def self.merge_scattered_fragment(fragment_id)
     establish_connection(:central)
@@ -54,8 +46,23 @@ class QueryRouter < ApplicationRecord
   end
 
 
-  def self.reallocate_fragments
+  def self.transfer_fragment(fragment_id, source_site_id, target_site_id)
+    ApplicationRecord.establish_connection_to_site(source_site_id)
+    fragment = Movie.find_by_year(fragment_id)
+    movie_array = fragment.to_a
+    fragment.delete_all
+    ApplicationRecord.establish_connection_to_site(target_site_id)
+    movie_array.each do |movie|
+      Movie.create(:title => movie.title, :release_date => movie.release_date)
+    end
+  end
+
+  def self.recalculate_optimal_sites(threshold)
+    # logic to refresh site_id in site fragment data table
+
+
 
   end
+
 
 end
