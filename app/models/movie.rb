@@ -9,7 +9,7 @@ class Movie < ApplicationRecord
 
   def self.movies_by_site(site)
     ApplicationRecord.establish_connection_to_site(site)
-    Movie.all.pluck(:title, :release_date).to_a
+    Movie.all.to_a
   end
 
   def self.fetch_fragment_by_year(year, current_site)
