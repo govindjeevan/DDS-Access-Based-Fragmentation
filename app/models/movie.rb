@@ -1,4 +1,5 @@
 class Movie < ApplicationRecord
+  require 'benchmark'
 
   def fragment_id
     release_date&.year
@@ -15,10 +16,13 @@ class Movie < ApplicationRecord
   def self.fetch_fragment_by_year(year, current_site)
     # searching record in local site
     ApplicationRecord.establish_connection_to_site(current_site)
+    time = Benchmark.measure do
+      Movie.find_by_year(year)
+    end
     result = Movie.find_by_year(year)
     if result.present?
       AccessLog.create_read_log(year, result.count, current_site)
-      return result
+      return result, time
     else
       # if record not found locally
       # finding the remote site with the fragment
@@ -26,11 +30,13 @@ class Movie < ApplicationRecord
       if fragment_site_id
         # connecting to the remote database and querying it
         ApplicationRecord.establish_connection_to_site(fragment_site_id)
-        result = Movie.find_by_year(year)
+        time = Benchmark.measure do
+          result = Movie.find_by_year(year)
+        end
         if result.present?
           AccessLog.create_read_log(year, result.count, current_site)
           QueryRouter.optimize_fragment_site(year, current_site)
-          return result
+          return result, time
         end
       end
     end

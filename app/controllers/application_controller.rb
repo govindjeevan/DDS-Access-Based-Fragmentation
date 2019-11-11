@@ -12,7 +12,9 @@ class ApplicationController < ActionController::Base
   end
 
   def movies_by_year
-    @movies = Movie.fetch_fragment_by_year(params[:year], @site)
+    x = Movie.fetch_fragment_by_year(params[:year], @site)
+    @movies = x[0]
+    @time = x[1]
     render 'application/movies'
   end
 
