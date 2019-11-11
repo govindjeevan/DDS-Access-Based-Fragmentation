@@ -12,8 +12,17 @@ class ApplicationController < ActionController::Base
   end
 
   def movies_by_year
-    @movies = Movie.fetch_fragment(params[:year], @site)
+    @movies = Movie.fetch_fragment_by_year(params[:year], @site)
     render 'application/movies'
+  end
+
+  def movies_by_time_range
+    if params[:start_time] && params[:end_time]
+      @movies = Movie.fetch_fragment_by_time(DateTime.parse(params[:start_time]), DateTime.parse(params[:end_time]), @site)
+    else
+      @movies = Movie.movies_by_site(@site)
+    end
+    render 'application/movies_by_time_range'
   end
 
   def all_movies

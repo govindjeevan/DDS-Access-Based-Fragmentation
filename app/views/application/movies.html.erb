@@ -1,5 +1,5 @@
 <h1>User Site: <%= @site %></h1>
-<h3>Fragments:   <%=Movie.all.map(&:fragment_id).uniq %>
+<h3>Fragments: <%= Movie.all.map(&:fragment_id).uniq %>
 </h3>
 <table>
   <tr>

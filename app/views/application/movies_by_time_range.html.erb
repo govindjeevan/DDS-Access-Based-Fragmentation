@@ -1,0 +1,22 @@
+<%= form_tag('/movies/time_range', method: :get) do %>
+  <%= datetime_field_tag 'start_time', value = params[:start_time] || (DateTime.now - 25.years).strftime("%Y-%m-%dT%H:%M") %>
+  <%= datetime_field_tag 'end_time', value = params[:end_time] || (DateTime.now - 20.years - 5.months).strftime("%Y-%m-%dT%H:%M") %>
+  <%= submit_tag 'Submit' %>
+<% end %>
+
+<h1>User Site: <%= @site %></h1>
+
+<table border="1px">
+  <tr>
+    <th style="padding: 15px">Title</th>
+    <th style="padding: 15px">Release</th>
+    <th style="padding: 15px">Fragment</th>
+  </tr>
+  <% @movies.each do |movie| %>
+    <tr>
+      <td style="padding: 15px"><%= movie.title %></td>
+      <td style="padding: 15px"><%= movie.release_date.strftime("%d-%m-%Y") %></td>
+      <td style="padding: 15px"><%= movie.fragment_id %></td>
+    </tr>
+  <% end %>
+</table>
