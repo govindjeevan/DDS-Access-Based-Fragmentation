@@ -1,7 +1,6 @@
 class QueryRouter < ApplicationRecord
   self.table_name = 'fragment_site_data'
 
-
   def self.find_site_of_fragment(fragment_id)
     establish_connection(:central)
     fragment_detail = QueryRouter.where(fragment_id: fragment_id).last

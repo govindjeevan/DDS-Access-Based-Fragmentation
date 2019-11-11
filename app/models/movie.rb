@@ -27,6 +27,6 @@ class Movie < ApplicationRecord
         end
       end
     end
-    return nil
+    nil
   end
 end

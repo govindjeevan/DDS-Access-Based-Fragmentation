@@ -14,16 +14,16 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.establish_connection_to_site(1)
     @all_movies = Movie.all
     ApplicationRecord.establish_connection_to_site(2)
-    @all_movies = @all_movies + Movie.all
+    @all_movies += Movie.all
     ApplicationRecord.establish_connection_to_site(3)
-    @all_movies = @all_movies + Movie.all
+    @all_movies += Movie.all
     ApplicationRecord.establish_connection_to_site(@site)
   end
 
   private
 
   def resolve_site
-    @site = 1
+    @site = Rails.configuration.x.site_id
   end
 
   def connect_to_site
