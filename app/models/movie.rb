@@ -62,16 +62,21 @@ class Movie < ApplicationRecord
   end
 
   def self.fetch_fragment_by_time(start_time, end_time, current_site)
-    # Same fragment
+    # Same fragment if year is same
     if start_time.year == end_time.year
       movies = fetch_movies(start_time, end_time, current_site)
     else
+      # assume range is Jan 15, 1994 to Jul 1, 1997
+      # Get all years in range as array ie 1995, 1996
       years = (start_time.year + 1..end_time.year - 1).to_a
+      # fetch for start time to start time year end ie Jan 15, 1994 to Dec 31, 1994
       movies = fetch_movies(start_time, start_time.end_of_year, current_site) || []
+      # fetch for full years ie 1995, 1996
       years.each do |yr_i|
         yr = DateTime.new(yr_i)
         movies += fetch_movies(yr.beginning_of_year, yr.end_of_year, current_site) || []
       end
+      # fetch for year end begin to end range ie 1997/1/1 to end time
       movies += fetch_movies(end_time.beginning_of_year, end_time, current_site) || []
     end
     movies
