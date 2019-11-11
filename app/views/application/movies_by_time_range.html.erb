@@ -6,6 +6,7 @@
 
 <h1>User Site: <%= @site %></h1>
 
+<h4><%=@movies.map(&:fragment_id).uniq %></h4>
 <table border="1px">
   <tr>
     <th style="padding: 15px">Title</th>
