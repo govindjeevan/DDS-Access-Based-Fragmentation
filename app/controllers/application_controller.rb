@@ -20,9 +20,9 @@ class ApplicationController < ActionController::Base
     ApplicationRecord.establish_connection_to_site(1)
     @movies = Movie.all
     ApplicationRecord.establish_connection_to_site(2)
-    @movies = @all_movies + Movie.all
+    @movies += Movie.all
     ApplicationRecord.establish_connection_to_site(3)
-    @all_movies = @all_movies + Movie.all
+    @movies += Movie.all
     ApplicationRecord.establish_connection_to_site(@site)
     render 'application/movies'
 

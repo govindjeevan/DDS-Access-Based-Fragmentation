@@ -4,7 +4,7 @@ class Movie < ApplicationRecord
     release_date.year
   end
 
-  scope :find_by_year, ->(year) { where("extract( year from release_date ) = ?", year) }
+  scope :find_by_year, ->(year) { where('extract( year from release_date ) = ?', year) }
 
   def self.movies_by_site(site)
     ApplicationRecord.establish_connection_to_site(site)
@@ -33,6 +33,6 @@ class Movie < ApplicationRecord
         end
       end
     end
-    return nil
+    nil
   end
 end
